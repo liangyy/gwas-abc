@@ -1,9 +1,4 @@
-if 'outdir' not in config:
-    config['outdir'] = 'output'
-if 'name_tag' not in config:
-    config['name_tag'] = 'test'
-
-import pathlib, gzip
+import pathlib, gzip, os
 
 def get_arg(str_, config):
     if str_ not in config:
@@ -30,6 +25,7 @@ def write_list(ofile, abc, cellcol):
     cmd = f"zcat {abc} | tail -n +2 | awk '{{print ${cellidx}}}' | sort | uniq > {ofile}"
     os.system(cmd)
 
+# for split_abc_prediction
 def get_all(abc_file, celltype_col):
     mylist = abc_file + '.all_celltype_list'
     if pathlib.Path(mylist).is_file():
@@ -40,26 +36,5 @@ def get_all(abc_file, celltype_col):
     outlist = [ '{outdir}/{name_tag}.' + cell + '.original.tsv.gz' for cell in cell_list ]
     outlist += [ '{outdir}/{name_tag}.' + cell + '.cleanup.tsv.gz' for cell in cell_list ]   
     return outlist
-
-shrink_arg = get_arg('shrink_region_by', config)
-filter_arg = get_arg('remove_abc_lt', config)
-
-rule all:
-    input:
-        [ i.format(**config) for i in get_all(config['abc_prediction'], config['abc_columns']['celltype']) ]
-
-rule split:
-    input:
-        config['abc_prediction']
-    output:
-        get_all(config['abc_prediction'], config['abc_columns']['celltype'])
-    shell:
-        'python split.py \
-            --input {input[0]} {config[abc_columns][chromosome]} \
-            {config[abc_columns][start]} {config[abc_columns][end]} \
-            {config[abc_columns][celltype]} {config[abc_columns][abc_score]} \
-            {shrink_arg} \
-            {filter_arg} \
-            --output_prefix {config[outdir]}/{config[name_tag]}'
 
     

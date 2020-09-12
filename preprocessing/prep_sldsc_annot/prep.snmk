@@ -1,0 +1,18 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+
+rule all:
+    input:
+        [ '{outdir}/{biosample}.{chr_num}.annot.gz'.format(chr_num=i, **config) for i in range(1, 23) ]
+        
+rule make_annot:
+    input:
+        bed = config['abc_file'],
+        bim = config['ldsc_files']['bim'],
+    output:
+        '{outdir}/{biosample}.{chr_num}.annot.gz'
+    shell:
+        "{config[ldsc_setup][python]} {config[ldsc_setup][make_annot]} \
+            --bed-file <(zcat {input.bed} | tail -n +2 | sed 's#^chr##g' | cut -f 1,2,3) \
+            --bimfile {input.bim} \
+            --annot-file {output[0]}"
