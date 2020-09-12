@@ -1,3 +1,10 @@
-abc_prediction: '/gpfs/data/im-lab/nas40t2/yanyul/ABC_enhancer2gene/AllPredictions.AvgHiC.ABC0.02.ModelRegions.txt.gz'
+# abc_prediction: '/gpfs/data/im-lab/nas40t2/yanyul/ABC_enhancer2gene/AllPredictions.AvgHiC.ABC0.02.ModelRegions.txt.gz'
+abc_prediction: 'test.gz'
+abc_columns:
+  celltype: 'CellType'
+  start: 'start'
+  end: 'end'
+  chromosome: 'chr'
+  abc_score: 'ABC.Score'
 shrink_region_by: 150
-remove_abc_lt: 0.02
+remove_abc_lt: 0.1

@@ -1,0 +1,4 @@
+.snakemake/
+*.gz
+*.gz.all_celltype_list
+output/

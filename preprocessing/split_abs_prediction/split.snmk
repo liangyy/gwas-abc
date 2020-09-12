@@ -3,25 +3,63 @@ if 'outdir' not in config:
 if 'name_tag' not in config:
     config['name_tag'] = 'test'
 
+import pathlib, gzip
+
 def get_arg(str_, config):
     if str_ not in config:
         return ''
     else:
         return '--{} {}'.format(str_, config[str_])
 
+def load_list(ff):
+    o = []
+    with open(ff, 'r') as f:
+        for i in f:
+            i = i.strip()
+            o.append(i)
+    return o
+
+def write_list(ofile, abc, cellcol):
+    with gzip.open(abc, 'rt') as f:
+        for i in f:
+            i = i.strip().split('\t')
+            if cellcol not in i:
+                raise ValueError(f'{cellcol} not in header! Exit')
+            cellidx = i.index(cellcol) + 1    
+            break
+    cmd = f"zcat {abc} | tail -n +2 | awk '{{print ${cellidx}}}' | sort | uniq > {ofile}"
+    os.system(cmd)
+
+def get_all(abc_file, celltype_col):
+    mylist = abc_file + '.all_celltype_list'
+    if pathlib.Path(mylist).is_file():
+        pass
+    else:
+        write_list(mylist, abc_file, celltype_col)
+    cell_list = load_list(mylist)
+    outlist = [ '{outdir}/{name_tag}.' + cell + '.original.tsv.gz' for cell in cell_list ]
+    outlist += [ '{outdir}/{name_tag}.' + cell + '.cleanup.tsv.gz' for cell in cell_list ]   
+    return outlist
+
 shrink_arg = get_arg('shrink_region_by', config)
 filter_arg = get_arg('remove_abc_lt', config)
 
+rule all:
+    input:
+        [ i.format(**config) for i in get_all(config['abc_prediction'], config['abc_columns']['celltype']) ]
+
 rule split:
     input:
-        input['abc_prediction']
+        config['abc_prediction']
     output:
-        '{outdir}/'
+        get_all(config['abc_prediction'], config['abc_columns']['celltype'])
     shell:
         'python split.py \
-            --input {input[0]} \
+            --input {input[0]} {config[abc_columns][chromosome]} \
+            {config[abc_columns][start]} {config[abc_columns][end]} \
+            {config[abc_columns][celltype]} {config[abc_columns][abc_score]} \
             {shrink_arg} \
             {filter_arg} \
-            --output_prefix {output[0]}/{config[name_tag]}'
+            --output_prefix {config[outdir]}/{config[name_tag]}'
 
     

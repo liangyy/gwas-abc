@@ -17,7 +17,9 @@ def update_region(df, start, end, shrink_size):
 def filter_by_abc(df, abc, cutoff):
     return df[ df[abc] >= cutoff ].reset_index(drop=True)        
     
-    
+def write_to_file(df, filename):
+    df.to_csv(filename, compression='gzip', sep='\t', index=False)
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(prog='split.py', description='''
@@ -59,20 +61,19 @@ if __name__ == '__main__':
     logging.info('Load ABC score file.')
     infile, chrm_col, start_col, end_col, celltype_col, abc_col = args.input
     df_abc = read_abc_file(infile)
-    celltype_list = df_abc[celltype_col].unqiue().values.tolist()
+    celltype_list = df_abc[celltype_col].unique().tolist()
     logging.info('There are {} cell types'.format(len(celltype_list)))
     
     for celltype in tqdm(celltype_list):
-        original_out = '{}.{}.original.tsv.gz'
-        cleanup_out = '{}.{}.cleanup.tsv.gz'
+        original_out = '{}.{}.original.tsv.gz'.format(args.output_prefix, celltype)
+        cleanup_out = '{}.{}.cleanup.tsv.gz'.format(args.output_prefix, celltype)
         df_sub = df_abc[ df_abc[celltype_col] == celltype ].reset_index(drop=True)
         
         # write the original file
-        df_sub.to_csv(original_out, compression='gzip', sep='\t')
+        write_to_file(df_sub, original_out)
         
         # work on the cleanup file
         df_sub = update_region(df_sub, start_col, end_col, args.shrink_region_by)
         df_sub = filter_by_abc(df_sub, abc_col, args.remove_abc_lt)
-        df_sub.to_csv(cleanup_out, compression='gzip', sep='\t')
-    
+        write_to_file(df_sub, cleanup_out) 
     
