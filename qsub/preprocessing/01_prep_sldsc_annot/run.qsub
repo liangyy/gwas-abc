@@ -13,6 +13,8 @@ source ~/.bashrc
 
 SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snakemake
 
+conda activate ldsc
+
 cd $PBS_O_WORKDIR
 cd ../../../preprocessing/prep_sldsc_annot
 
