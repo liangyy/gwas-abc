@@ -1,0 +1,22 @@
+#PBS -S /bin/bash
+#PBS -l walltime=24:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l mem=64gb
+#PBS -e logs/run_$BIOSAMPLE.err
+#PBS -o logs/run_$BIOSAMPLE.out
+#PBS -N prep_annot
+
+# ARGS BIOSAMPLE
+
+source ~/.bash_profile
+source ~/.bashrc
+
+SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snakemake
+
+cd $PBS_O_WORKDIR
+cd ../../../preprocessing/prep_sldsc_annot
+
+$SNMK -s prep.snmk --configfile $PBS_O_WORKDIR/config.yaml -p --cores 8 \
+  --config biosample=$BIOSAMPLE \
+  > $PBS_O_WORKDIR/logs/run_$BIOSAMPLE.log 2>&1
+
