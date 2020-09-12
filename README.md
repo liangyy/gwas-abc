@@ -6,3 +6,7 @@ The pipeline do two major things:
 
 * Perform biosample enrichment and S-LDSC regression to examine the enrichment of enhancer for each biosample.
 * Link GWAS loci to gene via ABC enhancer-gene map.
+
+# about data
+
+The ABC prediction is downloaded from [link](ftp://ftp.broadinstitute.org/outgoing/lincRNA/ABC/).

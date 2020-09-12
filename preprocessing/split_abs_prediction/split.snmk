@@ -1,0 +1,27 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+if 'name_tag' not in config:
+    config['name_tag'] = 'test'
+
+def get_arg(str_, config):
+    if str_ not in config:
+        return ''
+    else:
+        return '--{} {}'.format(str_, config[str_])
+
+shrink_arg = get_arg('shrink_region_by', config)
+filter_arg = get_arg('remove_abc_lt', config)
+
+rule split:
+    input:
+        input['abc_prediction']
+    output:
+        '{outdir}/'
+    shell:
+        'python split.py \
+            --input {input[0]} \
+            {shrink_arg} \
+            {filter_arg} \
+            --output_prefix {output[0]}/{config[name_tag]}'
+
+    
