@@ -1,0 +1,20 @@
+#PBS -S /bin/bash
+#PBS -l walltime=24:00:00
+#PBS -l mem=16gb
+#PBS -e run.err
+#PBS -o run.out
+#PBS -N split_ABC
+
+
+source ~/.bash_profile
+source ~/.bashrc
+
+SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snakemake
+
+conda activate abc
+
+cd $PBS_O_WORKDIR
+cd ../../preprocessing/split_abs_prediction
+
+$SNMK -s split.snmk --configfile $PBS_O_WORKDIR/config.yaml -p > run.log 2>&1
+
