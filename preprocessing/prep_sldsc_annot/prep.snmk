@@ -9,12 +9,12 @@ rule prep_bed:
     input:
         config['abc_file']
     output:
-        '{outdir}/tmp/{biosample}.{chr_num}.bed'
+        '{outdir}/tmp/{biosample}.bed'
     shell:
-        "zcat {input[0]} | tail -n +2 | sed 's#^chr##g' | cut -f 1,2,3 > {output[0]}"
+        "zcat {input[0]} | tail -n +2 | cut -f 1,2,3 > {output[0]}"
 rule make_annot:
     input:
-        bed = temp('{outdir}/tmp/{biosample}.{chr_num}.bed'),
+        bed = temp('{outdir}/tmp/{biosample}.bed'),
         bim = config['ldsc_files']['bim'],
     output:
         '{outdir}/{biosample}.{chr_num}.annot.gz'
