@@ -1,0 +1,10 @@
+outdir: '/scratch/t.cri.yliang/ABC-GWAS/ABC-SLDSC-annot'
+
+abc_file: '/scratch/t.cri.yliang/ABC-GWAS/ABC-by-biosample/AllPredictions.AvgHiC.ABC0.02.ModelRegions.{biosample}.cleanup.tsv.gz'
+ldsc_files:
+  bim: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}.bim'
+
+ldsc_setup:
+  python: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/ldsc/bin/python'
+  make_annot: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/ldsc/make_annot.py'
+  
