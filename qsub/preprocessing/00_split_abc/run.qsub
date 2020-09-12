@@ -14,7 +14,7 @@ SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snake
 conda activate abc
 
 cd $PBS_O_WORKDIR
-cd ../../preprocessing/split_abs_prediction
+cd ../../../preprocessing/split_abs_prediction
 
-$SNMK -s split.snmk --configfile $PBS_O_WORKDIR/config.yaml -p > run.log 2>&1
+$SNMK -s split.snmk --configfile $PBS_O_WORKDIR/config.yaml -p > $PBS_O_WORKDIR/run.log 2>&1
 
