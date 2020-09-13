@@ -1,4 +1,5 @@
 import pathlib, gzip, os
+import yaml
 
 def get_arg(str_, config):
     if str_ not in config:
@@ -25,6 +26,11 @@ def write_list(ofile, abc, cellcol):
     cmd = f"zcat {abc} | tail -n +2 | awk '{{print ${cellidx}}}' | sort | uniq > {ofile}"
     os.system(cmd)
 
+def read_yaml(ff):
+    with open(ff, 'r') as f:
+        o = yaml.safe_load(f)
+    return o
+    
 # for split_abc_prediction
 def get_all(abc_file, celltype_col):
     mylist = abc_file + '.all_celltype_list'

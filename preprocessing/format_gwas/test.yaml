@@ -1,0 +1,6 @@
+snp: variant_id
+sample_size: sample_size
+effect_allele: effect_allele
+non_effect_allele: non_effect_allele
+pval: pvalue
+zscore: zscore

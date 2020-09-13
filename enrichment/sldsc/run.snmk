@@ -1,0 +1,6 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+
+rule sldsc:
+    input:
+        # TODO

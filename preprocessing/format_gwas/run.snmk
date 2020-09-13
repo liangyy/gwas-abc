@@ -1,0 +1,54 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+
+
+import sys
+sys.path.insert(0, '../')
+from pylib import read_yaml, load_list
+
+col_dict = read_yaml(config['column_yaml'])
+
+def get_all(filename):
+    ll = load_list(filename)
+    return [ '{outdir}/' + i + '.tsv.gz' for i in ll ]
+
+if 'gwas_tag' in config:
+    rule all:
+        input:
+            '{outdir}/{gwas_tag}.sumstats.gz'.format(**config)
+if 'gwas_list' in config:        
+    rule all:
+        input: 
+            [ i.format(**config) for i in get_all(config['gwas_list']) ]
+
+rule clean_gwas:
+    input:
+        config['gwas_file']
+    output:
+        '{outdir}/{gwas_tag}.tsv.gz'
+    shell:
+        'python extract_relavant_cols.py \
+            --input {input[0]} \
+            --col_yaml {config[column_yaml]} \
+            --output {output[0]}'
+
+rule format_gwas:
+    input:
+        gwas = temp('{outdir}/{gwas_tag}.tsv.gz'),
+        snplist = config['snplist']
+    params:
+        '{outdir}/{gwas_tag}'
+    output:
+        '{outdir}/{gwas_tag}.sumstats.gz'
+    shell:
+        '{config[ldsc_setup][python]} {config[ldsc_setup][munge_sumstats]} \
+            --sumstats {input.gwas} \
+            --snp {col_dict[snp]} \
+            --N-col {col_dict[sample_size]} \
+            --a1 {col_dict[effect_allele]} \
+            --a2 {col_dict[non_effect_allele]} \
+            --p {col_dict[pval]} \
+            --signed-sumstats {col_dict[zscore]},0 \
+            --merge-alleles {input.snplist} \
+            --out {params[0]}'
+            
