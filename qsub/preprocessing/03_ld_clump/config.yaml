@@ -1,0 +1,13 @@
+gwas: /gpfs/data/im-lab/nas40t2/Data/SummaryResults/imputed_gwas_hg38_1.1/imputed_{gwas_tag}.txt.gz
+gwas_format:
+  snp_field: 'variant_id'
+  pval_field: 'pvalue'
+
+genotype: 
+  type: 'plink'
+  prefix: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}'
+snplist: '/gpfs/data/im-lab/nas40t2/yanyul/data/w_hm3.snplist'
+
+plink_memory_in_mb: 10000
+plink_threads: 1
+plink_cmd: 'plink'

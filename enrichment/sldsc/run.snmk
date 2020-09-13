@@ -1,25 +1,62 @@
 if 'outdir' not in config:
     config['outdir'] = 'output'
 
+import sys
+sys.path.insert(0, '../../preprocessing')
+from pylib import read_yaml, load_list
+
+def _gen_out(config, other={}):
+    return '{outdir}/{gwas_tag}_x_{biosample}.results'.format(**config, **other)
+def get_output(config):
+    if 'trait_list' in config and 'biosample_list' in config:
+        o = []
+        for g in load_list(config['trait_list']):
+            for b in load_list(config['biosample_list']):
+                o.append(_gen_out(config, {'gwas_tag': g, 'biosample': b}))
+        return o
+    if 'trait_list' in config and 'biosample' in config:
+        o = []
+        for g in load_list(config['trait_list']):
+            o.append(_gen_out(config, {'gwas_tag': g}))
+        return o
+    if 'biosample_list' in config and 'gwas_tag' in config:
+        o = []
+        for b in load_list(config['biosample_list']):
+            o.append(_gen_out(config, {'biosample': b}))
+        return o
+    if 'gwas_tag' in config and 'biosample' in config:
+        return _gen_out(config)
+    raise ValueError('Need some information about the gwas_tag and biosample.')
+
+if 'ldsc_files_yaml' in config:
+    ldsc_dict = read_yaml(config['ldsc_files_yaml'])
+    for k, v in ldsc_dict.items():
+        config[k] = v
+
+rule all:
+    input:
+        get_output(config)
+
 rule sldsc:
     input:
         sumstats = config['gwas_sumstats'],
         w_ld = [ config['other_inputs']['w_ld'].format(chr_num=i) for i in range(1, 23) ],
-        abc = [ config['abc_annot'].format(chr_num=i) for i in range(1, 23) ],
-        annot = [ config['QTL']['prefix'] + str(i) + '.annot.gz' for i in range(1, 23) ],
-        baseline = [ config['other_inputs']['baseline'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
-        frq = [ config['other_inputs']['frq'] + str(i) + '.frq' for i in range(1, 23) ]
+        abc_ldsc = [ config['abc_annot_prefix'] + str(i) + '.l2.ldscore.gz') for i in range(1, 23) ],
+        abc_annot = [ config['abc_annot_prefix'] + str(i) + '.annot.gz' for i in range(1, 23) ],
+        baseline = [ config['ldsc_files']['baseline_prefix'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
+        frq = [ config['ldsc_files']['frq_prefix'] + str(i) + '.frq' for i in range(1, 23) ]
     output:
-        'output/regression/{gwas}__{qtl}__{ldsc_info}.results'
+        '{outdir}/{gwas_tag}_x_{biosample}.results'
+    params:
+        '{outdir}/{gwas_tag}_x_{biosample}'
     shell:
-        '''
-        {config[ldsc_cmd]} \
+        '{config[ldsc_setup][python]} {config[ldsc_setup][munge_sumstats]} \
             --h2 {input.sumstats} \
-            --ref-ld-chr {config[other_inputs][baseline]},{config[QTL][prefix]} \
-            --frqfile-chr {config[other_inputs][frq]} \
-            --w-ld-chr {config[other_inputs][w_ld]} \
+            --ref-ld-chr {config[ldsc_files][baseline_prefix]},{config[abc_annot_prefix]} \
+            --frqfile-chr {config[ldsc_files][frq_prefix]} \
+            --w-ld-chr {config[ldsc_files][w_ld_prefix]} \
             --overlap-annot \
             --print-coefficients \
             --print-delete-vals \
-            --out output/regression/{wildcards.gwas}__{wildcards.qtl}__{wildcards.ldsc_info}
-        '''
+            --out {params[0]}'
+            

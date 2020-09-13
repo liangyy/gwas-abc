@@ -1,0 +1,24 @@
+#PBS -S /bin/bash
+#PBS -l walltime=24:00:00
+#PBS -l nodes=1:ppn=8
+#PBS -l mem=64gb
+#PBS -e logs/run_$BATCH.err
+#PBS -o logs/run_$BATCH.out
+#PBS -N ld_clump
+
+# ARGS BATCH (batch of traits)
+
+source ~/.bash_profile
+source ~/.bashrc
+
+SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snakemake
+
+module load gcc/6.2.0 atlas/3.10.3 lapack/3.7.0
+module load plink/1.90
+
+cd /gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/ld_clump
+
+$SNMK -s run.snmk --configfile $PBS_O_WORKDIR/config.yaml -p --cores 8 \
+  --config trait_list=$PBS_O_WORKDIR/gwas_list/$BATCH \
+  > $PBS_O_WORKDIR/logs/run_$BATCH.log 2>&1
+
