@@ -112,4 +112,3 @@ UKB_G40_Diagnoses_main_ICD10_G40_Epilepsy
 UKB_G43_Diagnoses_main_ICD10_G43_Migraine
 pgc.scz2
 tag.evrsmk.tbl
-
