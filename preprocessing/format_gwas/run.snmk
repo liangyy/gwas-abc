@@ -43,6 +43,7 @@ rule format_gwas:
     shell:
         '{config[ldsc_setup][python]} {config[ldsc_setup][munge_sumstats]} \
             --sumstats {input.gwas} \
+            --chunksize 1000 \
             --snp {col_dict[snp]} \
             --N-col {col_dict[sample_size]} \
             --a1 {col_dict[effect_allele]} \
