@@ -31,6 +31,9 @@ def read_yaml(ff):
         o = yaml.safe_load(f)
     return o
     
+def get_prefix(ss):
+    return '.'.join(ss.split('.')[:-1])
+
 # for split_abc_prediction
 def get_all(abc_file, celltype_col):
     mylist = abc_file + '.all_celltype_list'

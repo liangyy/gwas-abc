@@ -3,7 +3,7 @@ if 'outdir' not in config:
 
 import sys
 sys.path.insert(0, '../')
-from pylib import read_yaml
+from pylib import read_yaml, get_prefix
 if 'ldsc_files_yaml' in config:
     ldsc_dict = read_yaml(config['ldsc_files_yaml'])
     for k, v in ldsc_dict.items():
@@ -39,16 +39,17 @@ rule calc_ldsc:
         geno = config['ldsc_files'].values(),
         snplist = config['snplist']
     params:
-        config['ldsc_files']['bim'].split('.')[0],
+        get_prefix(config['ldsc_files']['bim']),
         '{outdir}/{biosample}.{chr_num}'
     output:
         '{outdir}/{biosample}.{chr_num}.l2.ldscore.gz'
     shell:
         "{config[ldsc_setup][python]} {config[ldsc_setup][ldsc]} \
             --l2 \
+            --thin-annot \
             --bfile {params[0]} \
             --ld-wind-cm 1 \
             --annot {input.annot} \
             --out {params[1]} \
-            --print-snp {input.snplist}"
+            --print-snp <(cat {input.snplist} | tail -n +2 | cut -f1)"
     
