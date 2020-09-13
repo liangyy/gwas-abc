@@ -1,0 +1,3 @@
+snplist: '/gpfs/data/im-lab/nas40t2/yanyul/data/w_hm3.snplist'
+ldsc_files:
+  bim: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}.bim'

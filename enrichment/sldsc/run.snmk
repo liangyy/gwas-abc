@@ -3,4 +3,23 @@ if 'outdir' not in config:
 
 rule sldsc:
     input:
-        # TODO
+        sumstats = config['gwas_sumstats'],
+        w_ld = [ config['other_inputs']['w_ld'].format(chr_num=i) for i in range(1, 23) ],
+        abc = [ config['abc_annot'].format(chr_num=i) for i in range(1, 23) ],
+        annot = [ config['QTL']['prefix'] + str(i) + '.annot.gz' for i in range(1, 23) ],
+        baseline = [ config['other_inputs']['baseline'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
+        frq = [ config['other_inputs']['frq'] + str(i) + '.frq' for i in range(1, 23) ]
+    output:
+        'output/regression/{gwas}__{qtl}__{ldsc_info}.results'
+    shell:
+        '''
+        {config[ldsc_cmd]} \
+            --h2 {input.sumstats} \
+            --ref-ld-chr {config[other_inputs][baseline]},{config[QTL][prefix]} \
+            --frqfile-chr {config[other_inputs][frq]} \
+            --w-ld-chr {config[other_inputs][w_ld]} \
+            --overlap-annot \
+            --print-coefficients \
+            --print-delete-vals \
+            --out output/regression/{wildcards.gwas}__{wildcards.qtl}__{wildcards.ldsc_info}
+        '''

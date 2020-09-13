@@ -2,8 +2,8 @@ outdir: '/scratch/t.cri.yliang/ABC-GWAS/GWAS-formatted-for-SLDSC'
 
 column_yaml: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/qsub/preprocessing/02_format_gwas/column.yaml'
 gwas_file: '/gpfs/data/im-lab/nas40t2/Data/SummaryResults/imputed_gwas_hg38_1.1/imputed_{gwas_tag}.txt.gz'
-snplist: '/gpfs/data/im-lab/nas40t2/yanyul/data/w_hm3.snplist'
 
 ldsc_setup:
   python: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/ldsc/bin/python'
   munge_sumstats: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/ldsc/munge_sumstats.py'
+ldsc_files: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/ldsc_files.yaml'

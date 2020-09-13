@@ -7,4 +7,5 @@ ldsc_files:
 ldsc_setup:
   python: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/ldsc/bin/python'
   make_annot: '/gpfs/data/im-lab/nas40t2/yanyul/softwares/ldsc/make_annot.py'
+ldsc_files: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/ldsc_files.yaml'
   

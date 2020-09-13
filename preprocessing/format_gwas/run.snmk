@@ -6,6 +6,11 @@ import sys
 sys.path.insert(0, '../')
 from pylib import read_yaml, load_list
 
+if 'ldsc_files_yaml' in config:
+    ldsc_dict = read_yaml(config['ldsc_files_yaml'])
+    for k, v in ldsc_dict.items():
+        config[k] = v
+
 col_dict = read_yaml(config['column_yaml'])
 
 def get_all(filename):
