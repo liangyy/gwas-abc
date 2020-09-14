@@ -6,3 +6,4 @@ output/
 *.out
 *.log
 __pycache__
+gwas_list
