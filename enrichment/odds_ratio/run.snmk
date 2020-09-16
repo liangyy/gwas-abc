@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, '../../preprocessing')
 from pylib import load_list
 
-def get_bed(config, list_name, tag_name):
+def get_bed(config):
     if 'bed_list' in config:
         ll = load_list(config['bed_list'])
         files = []
@@ -17,13 +17,13 @@ def get_bed(config, list_name, tag_name):
     else:
         raise ValueError('Need to have at least one of the two: bed_tag or bed_list.')
 
-def get_pval_cutoffs:
+def get_pval_cutoffs(config):
     if 'pval_cutoff' not in config:
         return ''
     else:
         return '--pval_cutoff_list {}'.format(' '.join(config['pval_cutoff']))
 
-bed_infiles, bed_args = get_bed(config)
+bed_infiles, bed_arg = get_bed(config)
 pval_cutoffs_arg = get_pval_cutoffs(config)
 gwas_cols = ' '.join(
     [ config['gwas']['cols'][i] for i in ['snpid', 'pval', 'chromosome', 'position' ] ] 

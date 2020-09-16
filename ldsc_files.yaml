@@ -1,6 +1,8 @@
 snplist: '/gpfs/data/im-lab/nas40t2/yanyul/data/w_hm3.snplist'
 ldsc_files:
   bim: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}.bim'
+  bed: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}.bed'
+  fam: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_EUR_Phase3_plink/1000G.EUR.QC.{chr_num}.fam'
   w_ld_prefix: '/gpfs/data/im-lab/nas40t2/yanyul/data/weights_hm3_no_hla/weights.'
   frq_prefix: '/gpfs/data/im-lab/nas40t2/yanyul/data/1000G_Phase3_frq/1000G.EUR.QC.'
   baseline_prefix: '/gpfs/data/im-lab/nas40t2/yanyul/data/baselineLD_v1.1/baselineLD.'

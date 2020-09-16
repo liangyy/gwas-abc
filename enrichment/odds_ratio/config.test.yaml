@@ -8,3 +8,5 @@ gwas:
     chromosome: chromosome
     position: position
 bed_list: 'bed_list.txt'
+
+bedtools_pylib: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/bedtools_pylib'

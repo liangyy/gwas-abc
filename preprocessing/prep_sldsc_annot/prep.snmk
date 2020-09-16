@@ -36,7 +36,7 @@ rule make_annot:
 rule calc_ldsc:
     input:
         annot = '{outdir}/{biosample}.{chr_num}.annot.gz',
-        geno = config['ldsc_files'].values(),
+        geno = [ config['ldsc_files'][i] for i in [ 'bed', 'bim', 'fam' ] ],
         snplist = config['snplist']
     params:
         get_prefix(config['ldsc_files']['bim']),
