@@ -28,6 +28,14 @@ def get_liftover_arg(config):
         return ''
     else:
         return '--liftover_gwas {} {}'.format(config['liftover_gwas']['chain'], config['liftover_gwas']['pylib'])
+        
+def get_outputs(config):
+    if 'trait_list' not in config:
+        return '{outdir}/snp_count.{gwas_tag}.tsv.gz'.format(**config)
+    else:
+        trait_list = load_list(config['trait_list'])
+        return [ '{outdir}/snp_count.{gwas_tag}.tsv.gz'.format(gwas_tag=i, **config) for i in trait_list ]
+    
 bed_infiles, bed_arg = get_bed(config)
 pval_cutoffs_arg = get_pval_cutoffs(config)
 gwas_cols = ' '.join(
@@ -37,7 +45,7 @@ liftover_arg = get_liftover_arg(config)
 
 rule all:
     input:
-        '{outdir}/snp_count.{gwas_tag}.tsv.gz'.format(**config)
+        get_outputs(config)
 
 rule or:
     input:
