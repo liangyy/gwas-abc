@@ -27,12 +27,13 @@ def get_liftover_arg(config):
     if 'liftover_gwas' not in config:
         return ''
     else:
-        return '--liftover_gwas {} {}'.format(config['liftover_gwas']['pylib'], config['liftover_gwas']['chain'])
+        return '--liftover_gwas {} {}'.format(config['liftover_gwas']['chain'], config['liftover_gwas']['pylib'])
 bed_infiles, bed_arg = get_bed(config)
 pval_cutoffs_arg = get_pval_cutoffs(config)
 gwas_cols = ' '.join(
     [ config['gwas']['cols'][i] for i in ['snpid', 'pval', 'chromosome', 'position' ] ] 
 )
+liftover_arg = get_liftover_arg(config)
 
 rule all:
     input:
@@ -55,5 +56,6 @@ rule or:
             --col_meta {gwas_cols} \
             --bedtools_pylib {config[bedtools_pylib]} \
             {pval_cutoffs_arg} \
+            {liftover_arg} \
             --output {output[0]}'
         

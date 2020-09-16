@@ -85,7 +85,7 @@ if __name__ == '__main__':
     
     sys.path.insert(0, args.bedtools_pylib)
     from bedtools_pylib import intersect_with_bed
-    
+   
     # setup liftover
     if args.liftover_gwas is not None:
         sys.path.insert(0, args.liftover_gwas[1])
@@ -123,6 +123,7 @@ if __name__ == '__main__':
             tmp = liftover(df_gwas.chromosome, df_gwas.position, args.liftover_gwas[0])
             df_gwas.chromosome = tmp.liftover_chr
             df_gwas.position = tmp.liftover_pos
+            df_gwas = df_gwas[ df_gwas.position > 0 ].reset_index(drop=True)
         
         for bed_tag in tqdm(bed_tags):
             
@@ -134,12 +135,15 @@ if __name__ == '__main__':
             )
             n_total = df_gwas_x_bed.shape[0]
             n_in = df_gwas_x_bed.annot.sum(axis=0)
-            n_cutoff = []
+            n_cutoff_in_bed = []
+            n_cutoff_total = []
             for p_cutoff in pval_cutoffs:
-                n_cutoff.append(df_gwas_x_bed[ df_gwas_x_bed.pval < p_cutoff ].annot.sum(axis=0))
+                tmp = df_gwas_x_bed[ df_gwas_x_bed.pval < p_cutoff ]
+                n_cutoff_total.append(tmp.shape[0])
+                n_cutoff_in_bed.append(tmp.annot.sum(axis=0))
             df_counts = pd.DataFrame(
-                [[gwas_tag, bed_tag] + [ n_total, n_in ] + n_cutoff], 
-                columns=['GWAS', 'BED', 'N_total', 'N_total_in_bed'] + [ 'N_in_bed_at_pval_lt_{}'.format(i) for i in pval_cutoffs ]
+                [[gwas_tag, bed_tag] + [ n_total, n_in ] + n_cutoff_total + n_cutoff_in_bed], 
+                columns=['GWAS', 'BED', 'N_total', 'N_total_in_bed'] + [ 'N_total_at_pval_lt_{}'.format(i) for i in pval_cutoffs ] + [ 'N_in_bed_at_pval_lt_{}'.format(i) for i in pval_cutoffs ]
             )
             collector.append(df_counts)
     
