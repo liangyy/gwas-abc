@@ -67,6 +67,10 @@ if __name__ == '__main__':
     parser.add_argument('--bedtools_pylib', help='''
         Path to bedtools pylib script.
     ''')
+    parser.add_argument('--liftover_gwas', default=None, nargs='+', help='''
+        If want to liftover GWAS result, set the chain file and 
+        path to liftover python lib.
+    ''')
     args = parser.parse_args()
  
     import logging, time, os
@@ -82,6 +86,11 @@ if __name__ == '__main__':
     sys.path.insert(0, args.bedtools_pylib)
     from bedtools_pylib import intersect_with_bed
     
+    # setup liftover
+    if args.liftover_gwas is not None:
+        sys.path.insert(0, args.liftover_gwas[1])
+        from lib import liftover
+        
     # load pval cutoffs
     if args.pval_cutoff_list is None:
         pval_cutoffs = [5e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
@@ -110,6 +119,10 @@ if __name__ == '__main__':
         df_gwas = df_gwas[ ~ df_gwas.pval.isna() ].reset_index(drop=True)
         if snp_list is not None:
             df_gwas = df_gwas[ df_gwas.variant_id.isin(snp_list) ].reset_index(drop=True)
+        if args.liftover_gwas is not None:
+            tmp = liftover(df_gwas.chromosome, df_gwas.position, args.liftover_gwas[0])
+            df_gwas.chromosome = tmp.liftover_chr
+            df_gwas.position = tmp.liftover_pos
         
         for bed_tag in tqdm(bed_tags):
             

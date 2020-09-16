@@ -10,3 +10,6 @@ gwas:
 bed_list: 'bed_list.txt'
 
 bedtools_pylib: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/bedtools_pylib'
+liftover_gwas:
+  pylib: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/liftover_snp'
+  chain: '/gpfs/data/im-lab/nas40t2/yanyul/data/hg38ToHg19.over.chain.gz'
