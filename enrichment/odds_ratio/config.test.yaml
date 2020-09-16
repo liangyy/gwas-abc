@@ -1,0 +1,10 @@
+bedfile_pattern: '/scratch/t.cri.yliang/ABC-GWAS/ABC-by-biosample/AllPredictions.AvgHiC.ABC0.02.ModelRegions.{bed_tag}.cleanup.tsv.gz'
+gwas: 
+  sumstats_pattern: '/gpfs/data/im-lab/nas40t2/Data/SummaryResults/imputed_gwas_hg38_1.1/imputed_{gwas_tag}.txt.gz'
+  ld_clump: '/scratch/t.cri.yliang/ABC-GWAS/GWAS-ld-clump/gwas_clump_x_{gwas_tag}.clumped_snp'
+  cols:
+    pval: 'pvalue'
+    snpid: 'variant_id'
+    chromosome: chromosome
+    position: position
+bed_list: 'bed_list.txt'

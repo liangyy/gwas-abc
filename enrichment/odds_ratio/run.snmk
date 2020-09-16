@@ -1,0 +1,54 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+
+import sys
+sys.path.insert(0, '../../preprocessing')
+from pylib import load_list
+
+def get_bed(config, list_name, tag_name):
+    if 'bed_list' in config:
+        ll = load_list(config['bed_list'])
+        files = []
+        for bed in ll:
+            files.append(config['bedfile_pattern'].format(bed_tag=bed))
+        return files, '--bed_list {}'.format(config['bed_list'])
+    elif 'bed_tag' in config:
+        return config['bedfile_pattern'].format(bed_tag=config['bed_tag']), '--bed_tag {}'.format(config['bed_tag'])
+    else:
+        raise ValueError('Need to have at least one of the two: bed_tag or bed_list.')
+
+def get_pval_cutoffs:
+    if 'pval_cutoff' not in config:
+        return ''
+    else:
+        return '--pval_cutoff_list {}'.format(' '.join(config['pval_cutoff']))
+
+bed_infiles, bed_args = get_bed(config)
+pval_cutoffs_arg = get_pval_cutoffs(config)
+gwas_cols = ' '.join(
+    [ config['gwas']['cols'][i] for i in ['snpid', 'pval', 'chromosome', 'position' ] ] 
+)
+
+rule all:
+    input:
+        '{outdir}/snp_count.{gwas_tag}.tsv.gz'.format(**config)
+
+rule or:
+    input:
+        gwas = config['gwas']['sumstats_pattern'],
+        clump = config['gwas']['ld_clump'],
+        bed = bed_infiles
+    output:
+        '{outdir}/snp_count.{gwas_tag}.tsv.gz'
+    shell:
+        'python construct_count_table.py \
+            --gwas_pattern {config[gwas][sumstats_pattern]} \
+            --bed_pattern {config[bedfile_pattern]} \
+            --gwas_tag {wildcards.gwas_tag} \
+            {bed_arg} \
+            --snp_list {input.clump} \
+            --col_meta {gwas_cols} \
+            --bedtools_pylib {config[bedtools_pylib]} \
+            {pval_cutoffs_arg} \
+            --output {output[0]}'
+        
