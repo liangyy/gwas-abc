@@ -1,0 +1,32 @@
+#PBS -S /bin/bash
+#PBS -l walltime=24:00:00
+#PBS -l nodes=1:ppn=1
+#PBS -l mem=16gb
+#PBS -e logs/run_$CONFIG.err
+#PBS -o logs/run_$CONFIG.out
+#PBS -N gwas_abc
+
+# ARGS PREP: script to generate the gwas table
+
+source ~/.bash_profile
+source ~/.bashrc
+
+SNMK=/gpfs/data/im-lab/nas40t2/yanyul/softwares/miniconda2/envs/mixqtl/bin/snakemake
+
+module load gcc/6.2.0 
+module load bedtools/2.29.0
+
+conda activate abc
+
+cd ${PBS_O_WORKDIR}
+
+if [[ -z $PREP ]]
+then
+  bash $PREP
+fi
+
+cd ../../../gwas_abc
+
+$SNMK -s run.snmk --configfile $PBS_O_WORKDIR/config.$CONFIG.yaml -p \
+  > $PBS_O_WORKDIR/logs/run_$CONFIG.log 2>&1
+
