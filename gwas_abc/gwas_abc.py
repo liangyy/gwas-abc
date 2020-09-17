@@ -1,4 +1,7 @@
+import sys
 import pandas as pd
+sys.path.insert(0, '../preprocessing')
+from pylib import read_yaml
 
 def read_gwas_lead(ff, cols):
     cols_to_use = [ 'chromosome', 'position', 'snpid', 'trait' ]
@@ -63,7 +66,7 @@ if __name__ == '__main__':
     ''')
     args = parser.parse_args()
  
-    import logging, time, sys, os
+    import logging, time, os
     # configing util
     logging.basicConfig(
         level = logging.INFO, 
@@ -73,12 +76,11 @@ if __name__ == '__main__':
     )
     
     from tqdm import tqdm
-    
+   
+    from pylib import get_intersect
+ 
     sys.path.insert(0, args.bedtools_pylib)
     from bedtools_pylib import annotate_region_with_bed, annotate_region_with_df
-    
-    sys.path.insert(0, '../preprocessing')
-    from pylib import get_intersect, read_yaml
     
     # setup liftover
     if args.liftover is not None:

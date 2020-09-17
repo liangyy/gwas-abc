@@ -5,16 +5,14 @@ if 'name_tag' not in config:
 
 # this snmk serves as the wrapper 
 # so that all input files could be listed easily
-import sys
-sys.path.insert(0, '../preprocessing')
-from pylib import read_yaml
+from gwas_abc import load_biosample_meta
 
 def get_biosamples_list(config):
-    dict_ = read_yaml(config['abc']['enrichment_yaml'])
+    dict_ = load_biosample_meta(config['abc']['enrichment_yaml'])
     out = []
-    for v in dict_.values():
-        out += list(v)
-    return list(set(out))
+    for _, v in dict_.items():
+        out += v
+    return list(set(out)) 
 
 def get_biosamples(config):
     ll = get_biosamples_list(config)
@@ -42,7 +40,7 @@ rule gwas_abc:
     output:
         '{outdir}/abc_score_table.{name_tag}.tsv.gz'
     params:
-        abc_cols = ' '.join(abc_col_idxs)
+        abc_cols = ' '.join([ str(i) for i in abc_col_idxs]),
         gwas_cols = ' '.join(gwas_cols)
     shell:
         'python gwas_abc.py \
