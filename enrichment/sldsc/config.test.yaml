@@ -1,2 +1,4 @@
 gwas_sumstats: '/scratch/t.cri.yliang/ABC-GWAS/GWAS-formatted-for-SLDSC/{gwas_tag}.sumstats.gz'
 abc_annot_prefix: '/scratch/t.cri.yliang/ABC-GWAS/ABC-SLDSC-annot/{biosample}.'
+
+ldsc_files_yaml: '../../ldsc_files.yaml'

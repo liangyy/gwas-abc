@@ -1,5 +1,10 @@
 #ARGS1: list of biosample
-gwaslist=../../../trait_list.txt
+if [[ -z $1 ]]
+then
+  gwaslist=../../../trait_list.txt
+else
+  gwaslist=$1
+fi
 
 for i in `cat $gwaslist`
 do

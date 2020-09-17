@@ -41,18 +41,19 @@ rule sldsc:
     input:
         sumstats = config['gwas_sumstats'],
         w_ld = [ config['ldsc_files']['w_ld_prefix'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
-        abc_ldsc = [ config['abc_annot_prefix'] + str(i) + '.l2.ldscore.gz') for i in range(1, 23) ],
+        abc_ldsc = [ config['abc_annot_prefix'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
         abc_annot = [ config['abc_annot_prefix'] + str(i) + '.annot.gz' for i in range(1, 23) ],
         baseline = [ config['ldsc_files']['baseline_prefix'] + str(i) + '.l2.ldscore.gz' for i in range(1, 23) ],
         frq = [ config['ldsc_files']['frq_prefix'] + str(i) + '.frq' for i in range(1, 23) ]
     output:
         '{outdir}/{gwas_tag}_x_{biosample}.results'
     params:
-        '{outdir}/{gwas_tag}_x_{biosample}'
+        '{outdir}/{gwas_tag}_x_{biosample}',
+        config['abc_annot_prefix']
     shell:
         '{config[ldsc_setup][python]} {config[ldsc_setup][ldsc]} \
             --h2 {input.sumstats} \
-            --ref-ld-chr {config[ldsc_files][baseline_prefix]},{config[abc_annot_prefix]} \
+            --ref-ld-chr {config[ldsc_files][baseline_prefix]},{params[1]} \
             --frqfile-chr {config[ldsc_files][frq_prefix]} \
             --w-ld-chr {config[ldsc_files][w_ld_prefix]} \
             --overlap-annot \
