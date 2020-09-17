@@ -18,6 +18,13 @@ def rename_cols(df, dict_):
         tmp_cols[v] = k
     df.columns = tmp_cols
 
+def load_biosample_meta(ff):
+    dict_ = read_yaml(ff)
+    for k, v in dict_.items():
+        if not isinstance(dict_[k], list):
+            dict_[k] = [v]
+    return dict_
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(prog='gwas_abc.py', description='''
@@ -113,7 +120,7 @@ if __name__ == '__main__':
         logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
  
     # loop over traits
-    trait_meta = read_yaml(args.abc_sample_yaml)
+    trait_meta = load_biosample_meta(args.abc_sample_yaml)
     trait_list = df_gwas.trait.unique().tolist()
     trait_list = get_intersect(trait_list, list(trait_meta.keys()))
     logging.info('There are {} traits to work with'.format(len(trait_list)))

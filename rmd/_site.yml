@@ -1,0 +1,19 @@
+name: "GWAS ABC"
+output_dir: "../docs"
+include: [".nojekyll"]
+exclude: ["include"]
+navbar:
+  title: "GWAS ABC"
+  left:
+    - text: "Home"
+      href: index.html
+  right:
+    - icon: fa-github
+      href: https://github.com/liangyy/gwas-abc
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cosmo
+    highlight: textmate
+    number_sections: true

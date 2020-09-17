@@ -1,0 +1,56 @@
+if 'outdir' not in config:
+    config['outdir'] = 'output'
+if 'name_tag' not in config:
+    config['name_tag'] = 'test'
+
+# this snmk serves as the wrapper 
+# so that all input files could be listed easily
+import sys
+sys.path.insert(0, '../preprocessing')
+from pylib import read_yaml
+
+def get_biosamples_list(config):
+    dict_ = read_yaml(config['abc']['enrichment_yaml'])
+    out = []
+    for v in dict_.values():
+        out += list(v)
+    return list(set(out))
+
+def get_biosamples(config):
+    ll = get_biosamples_list(config)
+    return [ config['abc']['pattern'].format(biosample=l) for l in ll ]
+
+abc_col_idxs = [ config['abc']['abc_cols'][k] for k in ['score', 'gene'] ]
+gwas_cols = [ config['gwas']['gwas_cols'][k] for k in ['chromosome', 'position', 'variant_id', 'trait'] ]
+
+if 'liftover' in config:
+    liftover_arg = '--liftover {} {}'.format(config['liftover']['chain'], config['liftover']['pylib'])
+else:
+    liftover_arg = ''
+    
+
+rule all:
+    input:
+        '{outdir}/abc_score_table.{name_tag}.tsv.gz'.format(**config)
+
+rule gwas_abc:
+    input:
+        bedfiles = get_biosamples(config),
+        gwas_table = config['gwas']['path'],
+        ld_block = config['ld_block'],
+        abc_yaml = config['abc']['enrichment_yaml']
+    output:
+        '{outdir}/abc_score_table.{name_tag}.tsv.gz'
+    params:
+        abc_cols = ' '.join(abc_col_idxs)
+        gwas_cols = ' '.join(gwas_cols)
+    shell:
+        'python gwas_abc.py \
+          --gwas_leading_variants {input.gwas_table} {params.gwas_cols} \
+          --ld_block {input.ld_block} \
+          --abc_pattern {config[abc][pattern]} {params.abc_cols} \
+          --abc_sample_yaml {input.abc_yaml} \
+          --bedtools_pylib {config[bedtools_pylib]} \
+          {liftover_arg} \
+          --output {output[0]}'
+          
