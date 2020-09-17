@@ -8,7 +8,15 @@ def read_gwas_lead(ff, cols):
     return tmp
 
 def read_ldblock(ff):
-    return pd.read_csv(ff, sep='\t')
+    tmp = pd.read_csv(ff, sep='\t')
+    tmp['end'] = tmp['end'] - 1  # avoid overlapping ldblock
+    return tmp
+
+def rename_cols(df, dict_):
+    tmp_cols = list(df.columns)
+    for k, v in dict_.items():
+        tmp_cols[v] = k
+    df.columns = tmp_cols
 
 if __name__ == '__main__':
     import argparse
@@ -66,8 +74,8 @@ if __name__ == '__main__':
     from pylib import get_intersect, read_yaml
     
     # setup liftover
-    if args.liftover_gwas is not None:
-        sys.path.insert(0, args.liftover_gwas[1])
+    if args.liftover is not None:
+        sys.path.insert(0, args.liftover[1])
         from lib import liftover
         
     # load gwas lead variants
@@ -82,19 +90,24 @@ if __name__ == '__main__':
     tmp_output = '{}_ldblock'.format(args.output)
     region_cols = ['chromosome', 'start', 'end']
     df_gwas = annotate_region_with_df(
-        df_gwas[region_cols], df_ldblock[region_cols + ['region_name']], 
+        df_gwas,
+        df_ldblock,
+        region_cols, 
+        region_cols,
+        ['region_name'], 
         suffix='_ldblock', tmp_prefix=tmp_output
     )
-    
+ 
     # loop over traits
     trait_meta = read_yaml(args.abc_sample_yaml)
     trait_list = df_gwas.trait.unique().tolist()
     trait_list = get_intersect(trait_list, list(trait_meta.keys()))
     logging.info('There are {} traits to work with'.format(len(trait_list)))
     
-    biosample_pattern, score_idxs = args.abc_pattern
+    biosample_pattern = args.abc_pattern[0]
+    score_idxs = [ int(i) for i in args.abc_pattern[1:] ]
     
-    gwas_region_cols = ['chromosome_ldblock', 'start_ldblock', 'end_ldblock']
+    gwas_region_cols = ['chromosome_ldblock', 'start_ldblock', 'end_ldblock'] 
     collector = []
     for trait in tqdm(trait_list):
         
@@ -105,17 +118,18 @@ if __name__ == '__main__':
             
             tmp_output = '{}_x_{}_x_{}'.format(args.output, trait, bio)
             tmp = annotate_region_with_bed(
-                df_gwas_sub[gwas_region_cols], 
+                df_gwas_sub, 
                 biosample_pattern.format(biosample=bio), 
-                tmp_prefix=tmp_output,
-                score_idxs
+                gwas_region_cols,
+                score_idxs,
+                tmp_prefix=tmp_output
             )
-            tmp.columns[-2] = 'ABC_score'
-            tmp.columns[-1] = 'Mapped_gene'
+            rename_cols(tmp, {'ABC_score': -2, 'Mapped_gene': -1})
             collector.append(tmp)
             
     df_abc = pd.concat(collector, axis=0)
     
     # save results
     logging.info('Saving results.')
-    df_abc.to_csv(args.output, compression='gzip', sep='\t')
+    df_abc.to_csv(args.output, compression='gzip', sep='\t', index=False)
+
