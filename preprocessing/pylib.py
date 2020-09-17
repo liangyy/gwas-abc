@@ -1,6 +1,10 @@
 import pathlib, gzip, os
 import yaml
 
+def get_intersect(l1, l2):
+    s1 = set(l1)
+    return list(s1.intersection(set(l2)))
+
 def get_arg(str_, config):
     if str_ not in config:
         return ''
