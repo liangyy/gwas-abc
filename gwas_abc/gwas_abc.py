@@ -139,6 +139,7 @@ if __name__ == '__main__':
                 tmp_prefix=tmp_output
             )
             rename_cols(tmp, {'ABC_score': -2, 'Mapped_gene': -1})
+            tmp['biosample'] = bio
             collector.append(tmp)
             
     df_abc = pd.concat(collector, axis=0)
