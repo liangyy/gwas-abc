@@ -89,6 +89,7 @@ if __name__ == '__main__':
     df_ldblock = read_ldblock(args.ld_block)
     tmp_output = '{}_ldblock'.format(args.output)
     region_cols = ['chromosome', 'start', 'end']
+    nrow = df_gwas.shape[0]
     df_gwas = annotate_region_with_df(
         df_gwas,
         df_ldblock,
@@ -97,6 +98,19 @@ if __name__ == '__main__':
         ['region_name'], 
         suffix='_ldblock', tmp_prefix=tmp_output
     )
+    df_gwas = df_gwas[ ~df_gwas.chromosome_ldblock.isna() ].reset_index(drop=True)
+    nrow_new = df_gwas.shape[0]
+    logging.info('{} SNPs are discarded due to annotate with LD block.'.format(nrow - nrow_new))
+    
+    if args.liftover is not None:
+        nrow = df_gwas.shape[0]
+        tmp = liftover(df_gwas.chromosome, df_gwas.start_ldblock, args.liftover[0])
+        df_gwas.start_ldblock = tmp.liftover_pos
+        tmp = liftover(df_gwas.chromosome, df_gwas.end_ldblock, args.liftover[0])
+        df_gwas.end_ldblock = tmp.liftover_pos
+        df_gwas = df_gwas[ (df_gwas.start_ldblock > 0) & (df_gwas.end_ldblock > 0) ].reset_index(drop=True)
+        nrow_new = df_gwas.shape[0]
+        logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
  
     # loop over traits
     trait_meta = read_yaml(args.abc_sample_yaml)
