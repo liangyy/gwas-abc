@@ -1,0 +1,24 @@
+outdir: '/scratch/t.cri.yliang/ABC-GWAS/gwas_abc'
+name_tag: 'GTExGWAS-OMIM-ldblock'
+gwas: 
+  # the following file is generated on the fly
+  path: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/qsub/gwas_abc/OMIM-LD-block.tsv.gz'
+  gwas_cols:
+    # need to list the column names of chromosome, position, variant_id, and trait
+    chromosome: chromosome
+    position: position
+    variant_id: lead_var
+    trait: trait
+ld_block: '/gpfs/data/im-lab/nas40t2/yanyul/mv_from_scratch/repo_new/rotation-at-imlab/analysis/allelic_heterogeneity/data/ld_independent_regions.txt'
+abc:
+  pattern: '/scratch/t.cri.yliang/ABC-GWAS/ABC-by-biosample/AllPredictions.AvgHiC.ABC0.02.ModelRegions.{biosample}.cleanup.tsv.gz'
+  abc_cols: 
+    # need to list the column index (1-based) of gene and score
+    gene: 7
+    score: 21
+  enrichment_yaml: '../simple_enrichment_biosamples.yaml'
+
+bedtools_pylib: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/bedtools_pylib'
+liftover:
+  pylib: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/misc-tools/liftover_snp'
+  chain: '/gpfs/data/im-lab/nas40t2/yanyul/data/hg38ToHg19.over.chain.gz'
