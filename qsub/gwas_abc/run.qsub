@@ -20,12 +20,12 @@ conda activate abc
 
 cd ${PBS_O_WORKDIR}
 
-if [[ -z $PREP ]]
+if [[ ! -z $PREP ]]
 then
   bash $PREP
 fi
 
-cd ../../../gwas_abc
+cd ../../gwas_abc
 
 $SNMK -s run.snmk --configfile $PBS_O_WORKDIR/config.$CONFIG.yaml -p \
   > $PBS_O_WORKDIR/logs/run_$CONFIG.log 2>&1

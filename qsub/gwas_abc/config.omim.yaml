@@ -2,7 +2,7 @@ outdir: '/scratch/t.cri.yliang/ABC-GWAS/gwas_abc'
 name_tag: 'GTExGWAS-OMIM'
 gwas: 
   # the following file is generated on the fly
-  path: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/qsub/OMIM-LD-block.tsv.gz'
+  path: '/gpfs/data/im-lab/nas40t2/yanyul/GitHub/gwas-abc/qsub/gwas_abc/OMIM-LD-block.tsv.gz'
   gwas_cols:
     # need to list the column names of chromosome, position, variant_id, and trait
     chromosome: chromosome
