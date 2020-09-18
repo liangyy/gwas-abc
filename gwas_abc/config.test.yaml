@@ -6,7 +6,8 @@ gwas:
     position: position
     variant_id: snpid
     trait: trait
-ld_block: '/gpfs/data/im-lab/nas40t2/yanyul/mv_from_scratch/repo_new/rotation-at-imlab/analysis/allelic_heterogeneity/data/ld_independent_regions.txt'
+# ld_block: '/gpfs/data/im-lab/nas40t2/yanyul/mv_from_scratch/repo_new/rotation-at-imlab/analysis/allelic_heterogeneity/data/ld_independent_regions.txt'
+window_size: 100000
 abc:
   pattern: '/scratch/t.cri.yliang/ABC-GWAS/ABC-by-biosample/AllPredictions.AvgHiC.ABC0.02.ModelRegions.{biosample}.cleanup.tsv.gz'
   abc_cols: 

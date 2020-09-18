@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 import pandas as pd
 sys.path.insert(0, '../preprocessing')
 from pylib import read_yaml
@@ -28,6 +29,13 @@ def load_biosample_meta(ff):
             dict_[k] = [v]
     return dict_
 
+def build_window_from_position(pos, window_size):
+    pos = np.array(pos)
+    start = pos - window_size
+    start[ start <= 0 ] = 1  
+    end = pos + window_size
+    return list(start), list(end)
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(prog='gwas_abc.py', description='''
@@ -38,9 +46,14 @@ if __name__ == '__main__':
         If should have at least columns for: chromosome, position, snpid, trait.
         List the column names of these columns in order.
     ''')
-    parser.add_argument('--ld_block', help='''
+    parser.add_argument('--ld_block', default=None, help='''
         We assume that LD block file and GWAS use the same genome build.
         TSV file with region_name, chromosome, start, end columns.
+    ''')
+    parser.add_argument('--window', default=None, type=int, help='''
+        --window specifies the size of window surrounding the leading variant.
+        This option cannot be used together with --ld_block.
+        If --ld_block is specified, --window won't be used.
     ''')
     parser.add_argument('--liftover', default=None, nargs='+', help='''
         In the case when GWAS and LD block files do not match 
@@ -93,31 +106,37 @@ if __name__ == '__main__':
     df_gwas['start'] = df_gwas['position'] # we do 1-based and include both
     df_gwas['end'] = df_gwas['position']
     
-    # annotate with LD block
-    logging.info('Annotating GWAS variants with LD block.')
-    df_ldblock = read_ldblock(args.ld_block)
-    tmp_output = '{}_ldblock'.format(args.output)
-    region_cols = ['chromosome', 'start', 'end']
-    nrow = df_gwas.shape[0]
-    df_gwas = annotate_region_with_df(
-        df_gwas,
-        df_ldblock,
-        region_cols, 
-        region_cols,
-        ['region_name'], 
-        suffix='_ldblock', tmp_prefix=tmp_output
-    )
-    df_gwas = df_gwas[ ~df_gwas.chromosome_ldblock.isna() ].reset_index(drop=True)
-    nrow_new = df_gwas.shape[0]
-    logging.info('{} SNPs are discarded due to annotate with LD block.'.format(nrow - nrow_new))
+    if args.ld_block is not None:
+        # annotate with LD block
+        logging.info('Annotating GWAS variants with LD block.')
+        df_ldblock = read_ldblock(args.ld_block)
+        tmp_output = '{}_ldblock'.format(args.output)
+        region_cols = ['chromosome', 'start', 'end']
+        nrow = df_gwas.shape[0]
+        df_gwas = annotate_region_with_df(
+            df_gwas,
+            df_ldblock,
+            region_cols, 
+            region_cols,
+            ['region_name'], 
+            suffix='_region', tmp_prefix=tmp_output
+        )
+        df_gwas = df_gwas[ ~df_gwas.chromosome_region.isna() ].reset_index(drop=True)
+        nrow_new = df_gwas.shape[0]
+        logging.info('{} SNPs are discarded due to annotate with LD block.'.format(nrow - nrow_new))
+    elif args.window is not None:
+        # enlarge GWAS SNP signal by a window size
+        logging.info('Enlarging the GWAS variants by window size = {} base pairs.'.format(args.window))
+        df_gwas['start_region'], df_gwas['end_region'] = build_window_from_position(df_gwas.position.tolist(), args.window)
+        
     
     if args.liftover is not None:
         nrow = df_gwas.shape[0]
-        tmp = liftover(df_gwas.chromosome, df_gwas.start_ldblock, args.liftover[0])
-        df_gwas.start_ldblock = tmp.liftover_pos
-        tmp = liftover(df_gwas.chromosome, df_gwas.end_ldblock, args.liftover[0])
-        df_gwas.end_ldblock = tmp.liftover_pos
-        df_gwas = df_gwas[ (df_gwas.start_ldblock > 0) & (df_gwas.end_ldblock > 0) ].reset_index(drop=True)
+        tmp = liftover(df_gwas.chromosome, df_gwas.start_region, args.liftover[0])
+        df_gwas.start_region = tmp.liftover_pos
+        tmp = liftover(df_gwas.chromosome, df_gwas.end_region, args.liftover[0])
+        df_gwas.end_region = tmp.liftover_pos
+        df_gwas = df_gwas[ (df_gwas.start_region > 0) & (df_gwas.end_region > 0) ].reset_index(drop=True)
         nrow_new = df_gwas.shape[0]
         logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
  
@@ -130,7 +149,7 @@ if __name__ == '__main__':
     biosample_pattern = args.abc_pattern[0]
     score_idxs = [ int(i) for i in args.abc_pattern[1:] ]
     
-    gwas_region_cols = ['chromosome_ldblock', 'start_ldblock', 'end_ldblock'] 
+    gwas_region_cols = ['chromosome_region', 'start_region', 'end_region'] 
     collector = []
     for trait in tqdm(trait_list):
         

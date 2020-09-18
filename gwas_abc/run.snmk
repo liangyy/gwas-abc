@@ -18,6 +18,15 @@ def get_biosamples(config):
     ll = get_biosamples_list(config)
     return [ config['abc']['pattern'].format(biosample=l) for l in ll ]
 
+def get_region_arg(config):
+    if 'ld_block' in config:
+        out = '--ld_block {}'.format(config['ld_block'])
+    elif 'window_size' in config:
+        out = '--window {}'.format(config['window_size'])
+    else:
+        raise ValueError('Do not find the desired input for region definition.')
+    return out
+
 abc_col_idxs = [ config['abc']['abc_cols'][k] for k in ['score', 'gene'] ]
 gwas_cols = [ config['gwas']['gwas_cols'][k] for k in ['chromosome', 'position', 'variant_id', 'trait'] ]
 
@@ -25,7 +34,7 @@ if 'liftover' in config:
     liftover_arg = '--liftover {} {}'.format(config['liftover']['chain'], config['liftover']['pylib'])
 else:
     liftover_arg = ''
-    
+region_arg = get_region_arg(config)    
 
 rule all:
     input:
@@ -35,7 +44,6 @@ rule gwas_abc:
     input:
         bedfiles = get_biosamples(config),
         gwas_table = config['gwas']['path'],
-        ld_block = config['ld_block'],
         abc_yaml = config['abc']['enrichment_yaml']
     output:
         '{outdir}/abc_score_table.{name_tag}.tsv.gz'
@@ -45,7 +53,7 @@ rule gwas_abc:
     shell:
         'python gwas_abc.py \
           --gwas_leading_variants {input.gwas_table} {params.gwas_cols} \
-          --ld_block {input.ld_block} \
+          {region_arg} \
           --abc_pattern {config[abc][pattern]} {params.abc_cols} \
           --abc_sample_yaml {input.abc_yaml} \
           --bedtools_pylib {config[bedtools_pylib]} \
