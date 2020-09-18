@@ -130,7 +130,7 @@ if __name__ == '__main__':
             df_gwas.start_region = tmp.liftover_pos
             tmp = liftover(df_gwas.chromosome, df_gwas.end_region, args.liftover[0])
             df_gwas.end_region = tmp.liftover_pos
-            df_gwas = df_gwas[ (df_gwas.start_region > 0) & (df_gwas.end_region > 0) ].reset_index(drop=True)
+            df_gwas = df_gwas[ (df_gwas.start_region > 0) & (df_gwas.end_region > 0) & (df_gwas.start_region <= df_gwas.end_region) ].reset_index(drop=True)
             nrow_new = df_gwas.shape[0]
             logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
     elif args.window is not None:
@@ -144,12 +144,12 @@ if __name__ == '__main__':
             logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
         # enlarge GWAS SNP signal by a window size
         logging.info('Enlarging the GWAS variants by window size = {} base pairs.'.format(args.window))
-        df_gwas['start_region'], df_gwas['end_region'] = build_window_from_position(df_gwas.position.tolist(), args.window)
         df_gwas['chromosome_region'] = df_gwas.chromosome
-    
+        df_gwas['start_region'], df_gwas['end_region'] = build_window_from_position(df_gwas.position.tolist(), args.window)
+        df_gwas['region_name_region'] = 'window_based'
+
     else:
         raise ValueError('Missing region definition.')
-
 
     
  
@@ -172,7 +172,6 @@ if __name__ == '__main__':
         for bio in biosamples:
             
             tmp_output = '{}_x_{}_x_{}'.format(args.output, trait, bio)
-            breakpoint()
             tmp = annotate_region_with_bed(
                 df_gwas_sub, 
                 biosample_pattern.format(biosample=bio), 
