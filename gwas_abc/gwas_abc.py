@@ -124,7 +124,24 @@ if __name__ == '__main__':
         df_gwas = df_gwas[ ~df_gwas.chromosome_region.isna() ].reset_index(drop=True)
         nrow_new = df_gwas.shape[0]
         logging.info('{} SNPs are discarded due to annotate with LD block.'.format(nrow - nrow_new))
+        if args.liftover is not None:
+            nrow = df_gwas.shape[0]
+            tmp = liftover(df_gwas.chromosome, df_gwas.start_region, args.liftover[0])
+            df_gwas.start_region = tmp.liftover_pos
+            tmp = liftover(df_gwas.chromosome, df_gwas.end_region, args.liftover[0])
+            df_gwas.end_region = tmp.liftover_pos
+            df_gwas = df_gwas[ (df_gwas.start_region > 0) & (df_gwas.end_region > 0) ].reset_index(drop=True)
+            nrow_new = df_gwas.shape[0]
+            logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
     elif args.window is not None:
+        # first liftover snp
+        if args.liftover is not None:
+            nrow = df_gwas.shape[0]
+            tmp = liftover(df_gwas.chromosome, df_gwas.position, args.liftover[0])
+            df_gwas.position = tmp.liftover_pos
+            df_gwas = df_gwas[ df_gwas.position > 0 ].reset_index(drop=True)
+            nrow_new = df_gwas.shape[0]
+            logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
         # enlarge GWAS SNP signal by a window size
         logging.info('Enlarging the GWAS variants by window size = {} base pairs.'.format(args.window))
         df_gwas['start_region'], df_gwas['end_region'] = build_window_from_position(df_gwas.position.tolist(), args.window)
@@ -134,15 +151,7 @@ if __name__ == '__main__':
         raise ValueError('Missing region definition.')
 
 
-    if args.liftover is not None:
-        nrow = df_gwas.shape[0]
-        tmp = liftover(df_gwas.chromosome, df_gwas.start_region, args.liftover[0])
-        df_gwas.start_region = tmp.liftover_pos
-        tmp = liftover(df_gwas.chromosome, df_gwas.end_region, args.liftover[0])
-        df_gwas.end_region = tmp.liftover_pos
-        df_gwas = df_gwas[ (df_gwas.start_region > 0) & (df_gwas.end_region > 0) ].reset_index(drop=True)
-        nrow_new = df_gwas.shape[0]
-        logging.info('{} SNPs are discarded due to liftover.'.format(nrow - nrow_new))
+    
  
     # loop over traits
     trait_meta = load_biosample_meta(args.abc_sample_yaml)
