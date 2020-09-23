@@ -10,3 +10,7 @@ The pipeline do two major things:
 # about data
 
 The ABC prediction is downloaded from [link](ftp://ftp.broadinstitute.org/outgoing/lincRNA/ABC/).
+
+# report
+
+See analysis report [here](https://liangyy.github.io/gwas-abc/docs/index.html).
