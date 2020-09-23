@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Results on OMIM silver standard</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">GWAS ABC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/liangyy/gwas-abc">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Results on OMIM silver standard</h1>
+
+</div>
+
+
+<pre class="r"><code>rm(list = ls())
+library(ggplot2)
+theme_set(theme_bw(base_size = 12))
+library(dplyr)
+library(reshape2)
+library(data.table)
+library(patchwork)
+options(stringsAsFactors = FALSE)
+library(SilverStandardPerformance)
+source(&#39;https://gist.githubusercontent.com/liangyy/43912b3ecab5d10c89f9d4b2669871c9/raw/3ca651cfa53ffccb8422f432561138a46e93710f/my_ggplot_theme.R&#39;)
+source(&#39;rlib.R&#39;)</code></pre>
+<div id="load-abc-score-table" class="section level1">
+<h1><span class="header-section-number">1</span> Load ABC score table</h1>
+<p>Calculated in <code>../qsub/gwas_abc/</code>.</p>
+<pre class="r"><code>gene_annot = read.table(&#39;https://bitbucket.org/yanyul/rotation-at-imlab/raw/a4ad9182aac280b1e4b84c62b4473acdcb56866a/data/annotations_gencode_v26.tsv&#39;, header = T)
+df_all = read.table(&#39;https://bitbucket.org/yanyul/rotation-at-imlab/raw/a4ad9182aac280b1e4b84c62b4473acdcb56866a/analysis/fdr_power_specificity/companion_figure_finalized/summary_on_expression_cleanup/logistic-based-test.datamatrix-with-gene-info.OMIM-LD-block-PrediXcan-MASH-EUR.tsv&#39;, sep = &#39;\t&#39;, header = T)
+
+df_abc = list()
+types = c(&#39;ldblock&#39;, &#39;window0kb&#39;, &#39;window1kb&#39;, &#39;window10kb&#39;, &#39;window100kb&#39;)
+for(tt in types) {
+  df_abc[[tt]] = fread(cmd = paste0(&#39;zcat &lt; ~/Desktop/tmp/gwas-abc/gwas_abc/abc_score_table.GTExGWAS-OMIM-&#39;, tt, &#39;.tsv.gz&#39;), header = T, sep = &#39;\t&#39;, data.table = F)
+  df_abc[[tt]] = df_abc[[tt]][!is.na(df_abc[[tt]]$ABC_score), ]
+}
+
+abc_yaml = yaml::read_yaml(&#39;../simple_enrichment_biosamples.yaml&#39;)</code></pre>
+</div>
+<div id="analysis-all-traits" class="section level1">
+<h1><span class="header-section-number">2</span> Analysis (all traits)</h1>
+<p>Here we limit the analysis to traits which has enrichment in at least one ABC biosample. And we annotate the genes with ensembl ID and take the maximum score across all biosamples for each locus/trait/gene tuple.</p>
+<pre class="r"><code># clean up on traits 
+traits_to_include = names(abc_yaml)
+traits_to_include = traits_to_include[ traits_to_include %in% df_all$trait ]
+df_all_clean = df_all %&gt;% filter(trait %in% traits_to_include)
+df_abc_max = list()
+df_abc_focused = list()
+for(tt in types) {
+  # annotate ABC table with ensembl ID
+  df_abc[[tt]] = inner_join(df_abc[[tt]], gene_annot %&gt;% select(gene_name, gene_id), by = c(&#39;Mapped_gene&#39; = &#39;gene_name&#39;))
+  # obtain ABC-Max score
+  df_abc_max[[tt]] = df_abc[[tt]] %&gt;% group_by(snpid, trait, gene_id) %&gt;% summarize(ABC_max = max(ABC_score, na.rm = T)) %&gt;% ungroup()
+  # merge all
+  df_all_clean = left_join(df_all_clean, df_abc_max[[tt]] %&gt;% select(snpid, trait, gene_id, ABC_max), by = c(&#39;lead_var&#39; = &#39;snpid&#39;, &#39;trait&#39;, &#39;gene&#39; = &#39;gene_id&#39;))
+  new_name = paste0(&#39;ABC_max&#39;, &#39;.&#39;, tt)
+  colnames(df_all_clean)[ncol(df_all_clean)] = new_name
+  df_all_clean[[new_name]][ is.na(df_all_clean[[new_name]])] = 0
+  df_abc_focused[[tt]] = df_all_clean[ paste(df_all_clean$trait, df_all_clean$lead_var) %in% paste(df_abc_max[[tt]]$trait, df_abc_max[[tt]]$snpid), ]
+}</code></pre>
+</div>
+<div id="roc-and-pr-curves-including-everything" class="section level1">
+<h1><span class="header-section-number">3</span> ROC and PR curves (including everything)</h1>
+<pre class="r"><code>df_score = df_all_clean %&gt;% select(lead_var, trait, gene, is_omim, predixcan_mashr_eur_score, enloc_score, contains(&quot;ABC_max&quot;))
+# df_score %&gt;% head %&gt;% pander::pander()
+df_score = df_score %&gt;% mutate(pair = paste(trait, gene))
+
+# pr and roc all loci
+scores = c(&#39;predixcan_mashr_eur_score&#39;, &#39;enloc_score&#39;, paste0(&#39;ABC_max.&#39;, types))
+coll = list()
+coll2 = list()
+for(ss in scores) {
+  pp = gen_fdr_power_curve(df_score$pair[df_score$is_omim], df_score$pair, df_score[[ss]])
+  coll[[length(coll) + 1]] = pp[-nrow(pp), ] %&gt;% mutate(method = ss)
+  rr = gen_roc_curve(df_score$pair[df_score$is_omim], df_score$pair, df_score[[ss]])
+  coll2[[length(coll2) + 1]] = rr[-nrow(rr), ] %&gt;% mutate(method = ss)
+}
+df_pr = do.call(rbind, coll)
+df_roc = do.call(rbind, coll2)
+p1 = df_pr %&gt;% ggplot() + 
+  geom_path(aes(x = recall, y = precision, color = method)) + 
+  theme(legend.position = c(0.6, 0.8)) +
+  th
+
+p2 = df_roc %&gt;% ggplot() + 
+  geom_path(aes(x = fpr, y = tpr, color = method)) + 
+  theme(legend.position = &quot;none&quot;) +
+  th
+
+ggsave(&#39;../output/abc_in_omim.png&#39;, p1 + p2, width = 12, height = 6)</code></pre>
+<p><img src="../output/abc_in_omim.png" /></p>
+<p><strong>Take-away</strong>:</p>
+<ul>
+<li>For most of the GWAS loci, they do not overlap with active enhancer, that’s why the recall is very low when including all GWAS loci.</li>
+</ul>
+<!-- ```{r} -->
+<!-- # pr and roc loci with active enhancer -->
+<!-- scores = c('predixcan_mashr_eur_score', 'enloc_score', paste0('ABC_max.', types)) -->
+<!-- coll = list() -->
+<!-- coll2 = list() -->
+<!-- for(ss in scores) { -->
+<!--   if(!is.na(stringr::str_match(ss, 'ABC_max.')[, 1])) { -->
+<!--     tt = stringr::str_remove(ss, 'ABC_max.') -->
+<!--     tmp = df_abc_focused[[tt]] %>% mutate(pair = paste(trait, gene)) -->
+<!--     pp = gen_fdr_power_curve(tmp$pair[tmp$is_omim], tmp$pair, tmp[[ss]]) -->
+<!--     coll[[length(coll) + 1]] = pp[-nrow(pp), ] %>% mutate(method = ss) -->
+<!--     rr = gen_roc_curve(tmp$pair[tmp$is_omim], tmp$pair, tmp[[ss]]) -->
+<!--     coll2[[length(coll2) + 1]] = rr[-nrow(rr), ] %>% mutate(method = ss) -->
+<!--   } else { -->
+<!--     pp = gen_fdr_power_curve(df_score$pair[df_score$is_omim], df_score$pair, df_score[[ss]]) -->
+<!--     coll[[length(coll) + 1]] = pp[-nrow(pp), ] %>% mutate(method = ss) -->
+<!--     rr = gen_roc_curve(df_score$pair[df_score$is_omim], df_score$pair, df_score[[ss]]) -->
+<!--     coll2[[length(coll2) + 1]] = rr[-nrow(rr), ] %>% mutate(method = ss) -->
+<!--   } -->
+<!-- } -->
+<!-- df_pr = do.call(rbind, coll) -->
+<!-- df_roc = do.call(rbind, coll2) -->
+<!-- p1 = df_pr %>% ggplot() +  -->
+<!--   geom_path(aes(x = recall, y = precision, color = method)) +  -->
+<!--   theme(legend.position = c(0.6, 0.8)) + -->
+<!--   th; p1 -->
+<!-- p2 = df_roc %>% ggplot() +  -->
+<!--   geom_path(aes(x = fpr, y = tpr, color = method)) +  -->
+<!--   theme(legend.position = "none") + -->
+<!--   th; p2 -->
+<!-- ggsave('abc_in_omim_active_loci.png', p1 + p2, width = 12, height = 6) -->
+<!-- ``` -->
+<!-- # Analysis (CD traits) -->
+<!-- We further limited the analysis to Crohn's disease (and related ones). -->
+<!-- ```{r} -->
+<!-- cd_traits = c('IBD.EUR.Inflammatory_Bowel_Disease') -->
+<!-- ``` -->
+<!-- # Assemble approach -->
+<!-- ```{r} -->
+<!-- df_work = df_abc_focused$window0kb %>% ungroup() %>% mutate(pair = paste(lead_var, trait), pair2 = paste(trait, gene)) -->
+<!-- df_work = df_work %>% group_by(trait, lead_var) %>% mutate(ABC_max.window0kb_percentage = rank(ABC_max.window0kb) / n()) %>% ungroup() -->
+<!-- head(df_work) -->
+<!-- df_work %>% ggplot() + geom_point(aes(x = predixcan_mashr_eur_percentage, y = ABC_max.window0kb_percentage, color = is_omim), alpha = 0.2) -->
+<!-- df_work %>% ggplot() + geom_point(aes(x = predixcan_mashr_eur_score, y = ABC_max.window0kb, color = is_omim), alpha = 0.2) -->
+<!-- df_work = df_work %>% mutate( -->
+<!--   predixcan_mashr_eur_inv = inv_norm(predixcan_mashr_eur_score),  -->
+<!--   ABC_max.window0kb_inv = inv_norm(ABC_max.window0kb)) -->
+<!-- df_work %>% ggplot() + geom_point(aes(x = predixcan_mashr_eur_inv, y = ABC_max.window0kb_inv, color = is_omim), alpha = 0.2) -->
+<!-- ``` -->
+<!-- There are r length(unique(df_work$pair[ df_work$is_omim ])) loci. Each time, hold out one locus and train in the other 24 loci. -->
+<!-- ```{r} -->
+<!-- loci_list = df_work$pair[df_work$is_omim] -->
+<!-- eqn_list = list(predixcan_only = 'predixcan_mashr_eur_score', abc_only = 'ABC_max.window0kb', both = 'predixcan_mashr_eur_score + ABC_max.window0kb') -->
+<!-- pval_abc_in_both = c() -->
+<!-- coll = list() -->
+<!-- for(ll in unique(loci_list)) { -->
+<!--   df_now = df_work[ df_work$pair != ll, ] -->
+<!--   df_ho = df_work[ df_work$pair == ll, ] -->
+<!--   for(eqn in names(eqn_list)) { -->
+<!--     mod = glm(as.formula(paste0('is_omim ~ ', eqn_list[[eqn]])), family = binomial(), data = df_now) -->
+<!--     pred = predict(mod, df_ho) -->
+<!--     rpred = rank(pred) -->
+<!--     tmp = data.frame(pred = pred, rank_pred = rpred, is_omim = df_ho$is_omim, trait = df_ho$trait, gene = df_ho$gene) %>% mutate(pair = paste(trait, gene), method = eqn) -->
+<!--     coll[[length(coll) + 1]] = tmp -->
+<!--     if(eqn == 'both') { -->
+<!--       pval_abc_in_both = c(pval_abc_in_both, summary(mod)$coefficients[3, 4]) -->
+<!--     } -->
+<!--   } -->
+<!-- } -->
+<!-- df_loo = do.call(rbind, coll) -->
+<!-- # predicted score based -->
+<!-- pr = list() -->
+<!-- roc = list() -->
+<!-- for(mm in names(eqn_list)) { -->
+<!--   df_loo_sub = df_loo %>% filter(method == mm) -->
+<!--   rr = gen_roc_curve(df_loo_sub$pair[df_loo_sub$is_omim], df_loo_sub$pair, df_loo_sub$pred) -->
+<!--   roc[[length(roc) + 1]] = rr[-1, ] %>% mutate(method = mm) -->
+<!--   pp = gen_fdr_power_curve(df_loo_sub$pair[df_loo_sub$is_omim], df_loo_sub$pair, df_loo_sub$pred) -->
+<!--   pr[[length(pr) + 1]] = pp[-nrow(pp), ] %>% mutate(method = mm) -->
+<!-- } -->
+<!-- rr = gen_roc_curve(df_work$pair2[df_work$is_omim], df_work$pair2, df_work$predixcan_mashr_eur_score) -->
+<!-- roc[[length(roc) + 1]] = rr[-1, ] %>% mutate(method = 'predixcan_raw') -->
+<!-- pp = gen_fdr_power_curve(df_work$pair2[df_work$is_omim], df_work$pair2, df_work$predixcan_mashr_eur_score) -->
+<!-- pr[[length(pr) + 1]] = pp[-nrow(pp), ] %>% mutate(method = 'predixcan_raw') -->
+<!-- rr = gen_roc_curve(df_work$pair2[df_work$is_omim], df_work$pair2, df_work$ABC_max.window0kb) -->
+<!-- roc[[length(roc) + 1]] = rr[-1, ] %>% mutate(method = 'abc_max_raw') -->
+<!-- pp = gen_fdr_power_curve(df_work$pair2[df_work$is_omim], df_work$pair2, df_work$ABC_max.window0kb) -->
+<!-- pr[[length(pr) + 1]] = pp[-nrow(pp), ] %>% mutate(method = 'abc_max_raw') -->
+<!-- pr = do.call(rbind, pr) -->
+<!-- roc = do.call(rbind, roc) -->
+<!-- p1 = pr %>% ggplot() +  -->
+<!--   geom_path(aes(x = recall, y = precision, color = method)) +  -->
+<!--   theme(legend.position = c(0.6, 0.8)) + -->
+<!--   th;  -->
+<!-- p2 = roc %>% ggplot() +  -->
+<!--   geom_path(aes(x = fpr, y = tpr, color = method)) +  -->
+<!--   theme(legend.position = "none") + -->
+<!--   th; -->
+<!-- p1 + p2 -->
+<!-- #  -->
+<!-- # # rank based  -->
+<!-- # rr = gen_roc_curve(df_loo$pair[df_loo$is_omim], df_loo$pair, df_loo$rank_pred, method = 'lt') -->
+<!-- # rr = rr[-1, ] -->
+<!-- # pp = gen_fdr_power_curve(df_loo$pair[df_loo$is_omim], df_loo$pair, df_loo$rank_pred, method = 'lt') -->
+<!-- # pp = pp[-nrow(pp), ] -->
+<!-- #  -->
+<!-- # p1 = pp %>% ggplot() +  -->
+<!-- #   geom_path(aes(x = recall, y = precision)) +  -->
+<!-- #   theme(legend.position = c(0.6, 0.8)) + -->
+<!-- #   th;  -->
+<!-- #  -->
+<!-- # p2 = rr %>% ggplot() +  -->
+<!-- #   geom_path(aes(x = fpr, y = tpr)) +  -->
+<!-- #   theme(legend.position = "none") + -->
+<!-- #   th; -->
+<!-- # p1 + p2 -->
+<!-- ``` -->
+</div>
+<div id="prroc-curves-limit-to-active-enhancer-only" class="section level1">
+<h1><span class="header-section-number">4</span> PR/ROC curves (limit to active enhancer only)</h1>
+<pre class="r"><code>df_limit = df_abc_focused$window0kb %&gt;% select(gene, lead_var, trait)
+df_limit = inner_join(df_limit, df_score, by = c(&#39;gene&#39;, &#39;lead_var&#39;, &#39;trait&#39;))
+
+scores = c(&#39;predixcan_mashr_eur_score&#39;, &#39;enloc_score&#39;, paste0(&#39;ABC_max.&#39;, types))
+coll = list()
+coll2 = list()
+for(ss in scores) {
+  pp = gen_fdr_power_curve(df_limit$pair[df_limit$is_omim], df_limit$pair, df_limit[[ss]])
+  coll[[length(coll) + 1]] = pp[-nrow(pp), ] %&gt;% mutate(method = ss)
+  rr = gen_roc_curve(df_limit$pair[df_limit$is_omim], df_limit$pair, df_limit[[ss]])
+  coll2[[length(coll2) + 1]] = rr[-nrow(rr), ] %&gt;% mutate(method = ss)
+}
+df_pr = do.call(rbind, coll)
+df_roc = do.call(rbind, coll2)
+p1 = df_pr %&gt;% ggplot() + 
+  geom_path(aes(x = recall, y = precision, color = method)) + 
+  theme(legend.position = c(0.6, 0.8)) +
+  th
+
+p2 = df_roc %&gt;% ggplot() + 
+  geom_path(aes(x = fpr, y = tpr, color = method)) + 
+  theme(legend.position = &quot;none&quot;) +
+  th
+
+ggsave(&#39;../output/abc_in_omim_loci_in_enhancer.png&#39;, p1 + p2, width = 12, height = 6)</code></pre>
+<p><img src="../output/abc_in_omim_loci_in_enhancer.png" /></p>
+<p><strong>Take-away</strong>:</p>
+<ul>
+<li>For the case GWAS loci do overlap with active enhancer, sometimes the silver standard gene is not implicated. That’s why the recall is still not so high in the figure on the left. But when it is implicated, the precision is good.</li>
+<li>On the other hand, PrediXcan has good performance on these GWAS loci which overlap with active enhancer.</li>
+</ul>
+</div>
+<div id="rocpr-stratified-by-activenon-active-loci" class="section level1">
+<h1><span class="header-section-number">5</span> ROC/PR stratified by active/non-active loci</h1>
+<p>Now, takeing together.</p>
+<pre class="r"><code>df_limit = df_abc_focused$window0kb %&gt;% select(gene, lead_var, trait)
+df_score2 = left_join(df_score, df_limit %&gt;% select(gene, lead_var, trait) %&gt;% mutate(is_active = T), by = c(&#39;gene&#39;, &#39;lead_var&#39;, &#39;trait&#39;))
+df_score2$is_active[is.na(df_score2$is_active)] = FALSE
+
+scores = c(&#39;predixcan_mashr_eur_score&#39;, &#39;enloc_score&#39;, paste0(&#39;ABC_max.&#39;, types))
+coll = list()
+coll2 = list()
+for(ss in scores) {
+  for(ll in c(T, F)) {
+    tmp = df_score2 %&gt;% filter(is_active == ll)
+    pp = gen_fdr_power_curve(tmp$pair[tmp$is_omim], tmp$pair, tmp[[ss]])
+    coll[[length(coll) + 1]] = pp[-nrow(pp), ] %&gt;% mutate(method = ss, is_active = ll)
+    rr = gen_roc_curve(tmp$pair[tmp$is_omim], tmp$pair, tmp[[ss]])
+    coll2[[length(coll2) + 1]] = rr[-nrow(rr), ] %&gt;% mutate(method = ss, is_active = ll)
+  }
+}
+df_pr = do.call(rbind, coll)
+df_roc = do.call(rbind, coll2)
+p1 = df_pr %&gt;% ggplot() + 
+  geom_path(aes(x = recall, y = precision, color = method)) + 
+  theme(legend.position = c(0.3, 0.6)) +
+  facet_wrap(~is_active, labeller = label_both) + 
+  th2
+
+p2 = df_roc %&gt;% ggplot() + 
+  geom_path(aes(x = fpr, y = tpr, color = method)) + 
+  theme(legend.position = &quot;none&quot;) +
+  facet_wrap(~is_active, labeller = label_both) + 
+  th2
+
+ggsave(&#39;../output/abc_in_omim_stratified_pr.png&#39;, p1, width = 12, height = 6)
+ggsave(&#39;../output/abc_in_omim_stratified_roc.png&#39;, p2, width = 12, height = 6)</code></pre>
+<p><img src="../output/abc_in_omim_stratified_pr.png" /> <img src="../output/abc_in_omim_stratified_roc.png" /></p>
+<p><strong>Take-away</strong>:</p>
+<ul>
+<li>In the non-active loci, enloc performs best but it does not perform well among active loci. In contrast, PrediXcan is the opposite.</li>
+</ul>
+</div>
+<div id="assemble-approach-combine-predixcan-enloc-and-abc-scores" class="section level1">
+<h1><span class="header-section-number">6</span> Assemble approach (combine PrediXcan, enloc, and ABC scores)</h1>
+<p>Here we want to combine PrediXcan ranking, enloc ranking, and ABC ranking (within a locus) and see if them have independent contribution. Let’s focus on the most stringent definition of ABC score, namely window size = 0. We consider all loci or the ones overlapping with active enhancer.</p>
+<p>The non-active locus, rank of ABC score is manully set to 0 which gives <code>rank_abc_in_active</code>. And we introduce another variable to take care of the baseline in non-active loci (<code>is_active</code>). The latter won’t be needed when limiting to active loci.</p>
+<pre class="r"><code>df_limit = df_all_clean
+df_limit$is_active = 0
+df_limit$is_active[ 
+  paste(df_limit$lead_var, df_limit$trait) %in% paste(df_abc_focused$window0kb$lead_var, df_abc_focused$window0kb$trait) 
+  ] = 1
+df_limit = df_limit %&gt;% group_by(trait, lead_var) %&gt;% mutate(rank_abc = rank(-ABC_max.window0kb)) %&gt;% ungroup()
+df_limit$rank_abc_in_active = df_limit$rank_abc
+df_limit$rank_abc_in_active[df_limit$is_active == 0] = 0
+
+
+my_logistic = function(ss, df) {
+  form = paste0(&#39;is_omim ~ &#39;, paste0(ss, collapse = &#39; + &#39;))
+  mod = glm(as.formula(form), family = binomial(), data = df)
+  out = as.data.frame(summary(mod)$coefficients)
+  out = out[rownames(out) %in% ss, ]
+  out$variable = rownames(out)
+  colnames(out)[1:4] = c(&#39;est&#39;, &#39;se&#39;, &#39;zval&#39;, &#39;pval&#39;)
+  out
+}
+# include all loci 
+# we consider: 1. joint model; 2. marginal model (always go with proximity)
+scores = list(
+  abc = c(&#39;is_active&#39;, &#39;rank_abc_in_active&#39;), 
+  predixcan = &#39;predixcan_mashr_eur_rank&#39;, 
+  enloc = &#39;enloc_rank&#39;, 
+  proximity = &#39;rank_proximity&#39;
+)
+mod_list = list()
+mod_list[[length(mod_list) + 1]] = my_logistic(unlist(scores), df_limit) %&gt;% mutate(test = &#39;all jointly&#39;)
+
+for(n in names(scores)) {
+  if(n == &#39;proximity&#39;) {
+    next
+  }
+  mod_list[[length(mod_list) + 1]] = my_logistic(c(scores[[n]], scores$proximity), df_limit) %&gt;% mutate(test = paste0(n, &#39; marginally&#39;))
+}
+df_all = do.call(rbind, mod_list)
+p = df_all %&gt;% filter(variable != &#39;is_active&#39;) %&gt;% 
+  ggplot() + geom_point(aes(x = variable, y = est)) + 
+  geom_errorbar(aes(x = variable, ymin = est - 1.96 * se, ymax = est + 1.96 * se)) + 
+  facet_wrap(~test, scales = &#39;free&#39;, nrow = 1) + 
+  geom_hline(yintercept = 0, linetype = 2) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
+  th2 + ggtitle(&#39;all loci&#39;)
+ggsave(&#39;../output/abc_in_omim_logistic_all.png&#39;, p, width = 8, height = 4)
+
+# focus on active locus
+scores = list(
+  abc = &#39;rank_abc_in_active&#39;,  # no need to include is_active anymore 
+  predixcan = &#39;predixcan_mashr_eur_rank&#39;, 
+  enloc = &#39;enloc_rank&#39;, 
+  proximity = &#39;rank_proximity&#39;
+)
+
+df_limit_active = df_limit %&gt;% filter(is_active == 1)
+
+mod_list = list()
+mod_list[[length(mod_list) + 1]] = my_logistic(unlist(scores), df_limit_active) %&gt;% mutate(test = &#39;all jointly&#39;)
+
+
+for(n in names(scores)) {
+  if(n == &#39;proximity&#39;) {
+    next
+  }
+  mod_list[[length(mod_list) + 1]] = my_logistic(c(scores[[n]], scores$proximity), df_limit_active) %&gt;% mutate(test = paste0(n, &#39; marginally&#39;))
+}
+df_active = do.call(rbind, mod_list)
+p = df_active %&gt;% filter(variable != &#39;is_active&#39;) %&gt;% 
+  ggplot() + geom_point(aes(x = variable, y = est)) + 
+  geom_errorbar(aes(x = variable, ymin = est - 1.96 * se, ymax = est + 1.96 * se)) + 
+  facet_wrap(~test, scales = &#39;free&#39;, nrow = 1) + 
+  geom_hline(yintercept = 0, linetype = 2) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
+  th2 + ggtitle(&#39;active loci only&#39;)
+ggsave(&#39;../output/abc_in_omim_logistic_active.png&#39;, p, width = 8, height = 4)</code></pre>
+<p><img src="../output/abc_in_omim_logistic_all.png" /></p>
+<p><img src="../output/abc_in_omim_logistic_active.png" /></p>
+<p><strong>Take-away</strong>:</p>
+<ul>
+<li>ABC ranking is significant when limiting to active loci. If not, it is not significant and this could be attributed to the fact that the non-active loci may dilute the signal. When focusing on active loci, ABC ranking is marginally informative but it is not significant when considering all these variables jointly (this may due to lack of samples).</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
