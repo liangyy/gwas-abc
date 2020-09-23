@@ -451,7 +451,7 @@ p2 = df_roc %&gt;% ggplot() +
   th
 
 ggsave(&#39;../output/abc_in_omim.png&#39;, p1 + p2, width = 12, height = 6)</code></pre>
-<p><img src="../output/abc_in_omim.png" /></p>
+<p><img src="abc_in_omim.png" /></p>
 <p><strong>Take-away</strong>:</p>
 <ul>
 <li>For most of the GWAS loci, they do not overlap with active enhancer, that’s why the recall is very low when including all GWAS loci.</li>
@@ -601,7 +601,7 @@ p2 = df_roc %&gt;% ggplot() +
   th
 
 ggsave(&#39;../output/abc_in_omim_loci_in_enhancer.png&#39;, p1 + p2, width = 12, height = 6)</code></pre>
-<p><img src="../output/abc_in_omim_loci_in_enhancer.png" /></p>
+<p><img src="abc_in_omim_loci_in_enhancer.png" /></p>
 <p><strong>Take-away</strong>:</p>
 <ul>
 <li>For the case GWAS loci do overlap with active enhancer, sometimes the silver standard gene is not implicated. That’s why the recall is still not so high in the figure on the left. But when it is implicated, the precision is good.</li>
@@ -643,7 +643,7 @@ p2 = df_roc %&gt;% ggplot() +
 
 ggsave(&#39;../output/abc_in_omim_stratified_pr.png&#39;, p1, width = 12, height = 6)
 ggsave(&#39;../output/abc_in_omim_stratified_roc.png&#39;, p2, width = 12, height = 6)</code></pre>
-<p><img src="../output/abc_in_omim_stratified_pr.png" /> <img src="../output/abc_in_omim_stratified_roc.png" /></p>
+<p><img src="abc_in_omim_stratified_pr.png" /> <img src="abc_in_omim_stratified_roc.png" /></p>
 <p><strong>Take-away</strong>:</p>
 <ul>
 <li>In the non-active loci, enloc performs best but it does not perform well among active loci. In contrast, PrediXcan is the opposite.</li>
@@ -728,8 +728,8 @@ p = df_active %&gt;% filter(variable != &#39;is_active&#39;) %&gt;%
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
   th2 + ggtitle(&#39;active loci only&#39;)
 ggsave(&#39;../output/abc_in_omim_logistic_active.png&#39;, p, width = 8, height = 4)</code></pre>
-<p><img src="../output/abc_in_omim_logistic_all.png" /></p>
-<p><img src="../output/abc_in_omim_logistic_active.png" /></p>
+<p><img src="abc_in_omim_logistic_all.png" /></p>
+<p><img src="abc_in_omim_logistic_active.png" /></p>
 <p><strong>Take-away</strong>:</p>
 <ul>
 <li>ABC ranking is significant when limiting to active loci. If not, it is not significant and this could be attributed to the fact that the non-active loci may dilute the signal. When focusing on active loci, ABC ranking is marginally informative but it is not significant when considering all these variables jointly (this may due to lack of samples).</li>

@@ -93,7 +93,7 @@ p2 = df_roc %>% ggplot() +
 ggsave('../output/abc_in_omim.png', p1 + p2, width = 12, height = 6)
 ```
 
-![](../output/abc_in_omim.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim.png)
 
 **Take-away**:
 
@@ -268,7 +268,7 @@ p2 = df_roc %>% ggplot() +
 ggsave('../output/abc_in_omim_loci_in_enhancer.png', p1 + p2, width = 12, height = 6)
 ```
 
-![](../output/abc_in_omim_loci_in_enhancer.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim_loci_in_enhancer.png)
 
 **Take-away**:
 
@@ -314,8 +314,8 @@ ggsave('../output/abc_in_omim_stratified_pr.png', p1, width = 12, height = 6)
 ggsave('../output/abc_in_omim_stratified_roc.png', p2, width = 12, height = 6)
 ```
 
-![](../output/abc_in_omim_stratified_pr.png)
-![](../output/abc_in_omim_stratified_roc.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim_stratified_pr.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim_stratified_roc.png)
 
 **Take-away**: 
 
@@ -409,10 +409,10 @@ p = df_active %>% filter(variable != 'is_active') %>%
 ggsave('../output/abc_in_omim_logistic_active.png', p, width = 8, height = 4)
 ```
 
-![](../output/abc_in_omim_logistic_all.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim_logistic_all.png)
 
 
-![](../output/abc_in_omim_logistic_active.png)
+![](https://liangyy.github.io/gwas-abc/output/abc_in_omim_logistic_active.png)
 
 **Take-away**: 
 

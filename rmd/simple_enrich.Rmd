@@ -60,9 +60,11 @@ df_or_best = df_or %>% filter(pval_cutoff_old == '5e.08') %>% group_by(GWAS, pva
 df_or_best = inner_join(df_or, df_or_best, by = c('GWAS', 'pval_cutoff', 'BED' = 'best_bed'))
 df_or_best = inner_join(df_or_best, trait_meta %>% select(Tag, new_Phenotype), by = c('GWAS' = 'Tag'))
 p = df_or_best %>% ggplot() + geom_point(aes(x = new_Phenotype, y = or, color = pval < 0.05 / nrow(df_or_best), shape = pval < 0.05)) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + facet_wrap(~pval_cutoff, scales = 'free_y') + scale_y_log10(); p
-ggsave('best_enrich_of_ABC_enhancer_in_GWAS_loci.png', p, width = 14, height = 6)
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) + facet_wrap(~pval_cutoff, scales = 'free_y') + scale_y_log10()
+ggsave('../output/best_enrich_of_ABC_enhancer_in_GWAS_loci.png', p, width = 14, height = 6)
 ```
+
+![](https://liangyy.github.io/gwas-abc/output/best_enrich_of_ABC_enhancer_in_GWAS_loci.png)
 
 ```{r}
 df_or %>% filter(GWAS == 'GIANT_HEIGHT' & pval_cutoff_old == '5e.08') %>% ggplot() + geom_bar(aes(x = BED, y = or), stat = 'identity', position = 'dodge')
