@@ -5,3 +5,4 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 ---
 
 * Simple enrichment analysis (Odds ratio) [link](simple_enrich.html)
+* ABC scores in OMIM silver standard [link](omim.html)
